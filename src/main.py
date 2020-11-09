@@ -10,14 +10,14 @@ def define_fluctuation():
         'positive':      { 'rank': (0, 10000),      'miu': Fluctuation.positive } 
     }
     fluctuation = LinguisticVariable('fluctuation', (-10000, 10000), categories)
-    very_negative = FuzzySet('very_negative', 'fluctuation', 
-                        fluctuation.categories['very_negative']['rank'], fluctuation.categories['very_negative']['miu'])
-    few_negative = FuzzySet('few_negative', 'fluctuation', 
-                        fluctuation.categories['few_negative']['rank'], fluctuation.categories['few_negative']['miu'])
-    negligible = FuzzySet('negligible', 'fluctuation', 
-                        fluctuation.categories['negligible']['rank'], fluctuation.categories['negligible']['miu'])
-    positive = FuzzySet('positive', 'fluctuation', 
-                        fluctuation.categories['positive']['rank'], fluctuation.categories['positive']['miu'])
+    very_negative = FuzzySet('very_negative', fluctuation.categories['very_negative']['rank'], 
+                        fluctuation.categories['very_negative']['miu'], 'fluctuation')
+    few_negative = FuzzySet('few_negative', fluctuation.categories['few_negative']['rank'], 
+                        fluctuation.categories['few_negative']['miu'], 'fluctuation')
+    negligible = FuzzySet('negligible', fluctuation.categories['negligible']['rank'], 
+                    fluctuation.categories['negligible']['miu'], 'fluctuation')
+    positive = FuzzySet('positive', fluctuation.categories['positive']['rank'], 
+                    fluctuation.categories['positive']['miu'], 'fluctuation')
     
     return fluctuation, [very_negative, few_negative, negligible, positive]
 
@@ -28,9 +28,9 @@ def define_purchases():
         'high':   { 'rank': (10000, 50000), 'miu': Purchases.high } 
     }
     purchases = LinguisticVariable('purchases', (0, 50000), categories)
-    few = FuzzySet('few', 'purchases', purchases.categories['few']['rank'], purchases.categories['few']['miu'])
-    medium = FuzzySet('medium', 'purchases', purchases.categories['medium']['rank'], purchases.categories['medium']['miu'])
-    high = FuzzySet('high', 'purchases', purchases.categories['high']['rank'], purchases.categories['high']['miu'])
+    few = FuzzySet('few', purchases.categories['few']['rank'], purchases.categories['few']['miu'], 'purchases')
+    medium = FuzzySet('medium', purchases.categories['medium']['rank'], purchases.categories['medium']['miu'], 'purchases')
+    high = FuzzySet('high', purchases.categories['high']['rank'], purchases.categories['high']['miu'], 'purchases')
     
     return purchases, [few, medium, high]
 
@@ -42,14 +42,26 @@ def define_sales():
         'high':     { 'rank': (10000, 50000), 'miu': Sales.high } 
     }
     sales = LinguisticVariable('sales', (0, 50000), categories)
-    very_few = FuzzySet('very_few', 'sales', sales.categories['very_few']['rank'], sales.categories['very_few']['miu'])
-    few = FuzzySet('few', 'sales', sales.categories['few']['rank'], sales.categories['few']['miu'])
-    medium = FuzzySet('medium', 'sales', sales.categories['medium']['rank'], sales.categories['medium']['miu'])
-    high = FuzzySet('high', 'sales', sales.categories['high']['rank'], sales.categories['high']['miu'])
+    very_few = FuzzySet('very_few', sales.categories['very_few']['rank'], sales.categories['very_few']['miu'], 'sales')
+    few = FuzzySet('few', sales.categories['few']['rank'], sales.categories['few']['miu'], 'sales')
+    medium = FuzzySet('medium', sales.categories['medium']['rank'], sales.categories['medium']['miu'], 'sales')
+    high = FuzzySet('high', sales.categories['high']['rank'], sales.categories['high']['miu'], 'sales')
     
     return sales, [very_few, few, medium, high]
+
+def define_rules(fluctuation_var, fluctuation_sets, purchases_var, purchases_sets, sales_var, sales_sets):
+    variables = [fluctuation_var, purchases_var, sales_var]
+    sets = [fluctuation_sets, purchases_sets,sales_sets]
+    
+    # first_rule = FuzzyRule(variables, sets,)
 
 if __name__ == '__main__':
     fluctuation_var, fluctuation_sets = define_fluctuation()
     purchases_var, purchases_sets = define_purchases()
     sales_var, sales_sets = define_sales()
+
+    variables = { 'fluctuation': fluctuation_var, 'purchases': purchases_var, 'sales': sales_var }
+    sets = { 'fluctuation': {}, 'purchases': {}, 'sales': {} }
+    for fset in fluctuation_sets + purchases_sets + sales_sets:
+        sets[fset.linguistic_variable_name][fset.name] = fset
+    
