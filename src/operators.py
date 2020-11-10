@@ -5,15 +5,12 @@ class OperationObject:
 
 class Value(OperationObject):
 
-    def __init__(self, fuzzy_set):
+    def __init__(self, fuzzy_set, value=None):
         self.fuzzy_set = fuzzy_set
-        self.value = None
+        self.value = value
     
     def eval(self):
         return fuzzy_set.membership_func(self.value)
-    
-    def set_value(self, value):
-        self.value = value
 
 class AND(OperationObject):
 
