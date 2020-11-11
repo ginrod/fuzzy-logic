@@ -18,7 +18,7 @@ class FuzzyInferenceSystem:
         rule_fuzzy_subset_funcs = []
         for rule in self.rules:
             vant = rule.antecedent.eval()
-            func = lambda x: vant * rule.consecuence.membership_func(x))
+            func = lambda x: vant * rule.consecuence.membership_func(x)
             rule_fuzzy_subset_funcs.append(func)
         
         return lambda x: max([func(x) for func in rule_fuzzy_subset_funcs])
