@@ -10,7 +10,7 @@ class Value(OperationObject):
         self.value = value
     
     def eval(self):
-        return fuzzy_set.membership_func(self.value)
+        return self.fuzzy_set.membership_func(self.value)
 
 class AND(OperationObject):
 
@@ -20,7 +20,7 @@ class AND(OperationObject):
         self.y = y
     
     def eval(self):
-        x, y = x.eval(), y.eval()
+        x, y = self.x.eval(), self.y.eval()
         return min(x, y)
 
 
@@ -32,5 +32,28 @@ class OR(OperationObject):
         self.y = y
     
     def eval(self):
-        x, y = x.eval(), y.eval()
+        x, y = self.x.eval(), self.y.eval()
         return max(x, y)
+
+class MinOperator:
+    def __init__(self, vant, function):
+        self.vant = vant
+        self.function = function
+    
+    def eval(self, x):
+        return min(self.vant, self.function(x))
+
+class ProductOperator:
+    def __init__(self, vant, function):
+        self.vant = vant
+        self.function = function
+    
+    def eval(self, x):
+        return self.vant * self.function(x)
+
+class MaxOperator:
+    def __init__(self, functions):
+        self.functions = functions
+    
+    def eval(self, x):
+        return max([func.eval(x) for func in self.functions])

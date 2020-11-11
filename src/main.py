@@ -1,6 +1,7 @@
 from operators import *
 from fuzzy_entities import *
 from fuzzification import Fluctuation, Purchases, Sales
+from fuzzy_inference_system import FuzzyInferenceSystem
 
 def define_fluctuation():
     categories = { 
@@ -100,5 +101,10 @@ if __name__ == '__main__':
         sets[fset.linguistic_variable_name][fset.name] = fset
     
     # Testing rules with some values
-    vfluctuation, vpurchases =  -300, 300
+    vfluctuation, vpurchases = 0, 500
     rules = define_rules(variables, sets, vfluctuation, vpurchases)
+
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+
+    defuzzied_output = FIS.COA(FIS.mamdani_method())
+    print(defuzzied_output)
