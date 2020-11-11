@@ -39,3 +39,15 @@ class FuzzyInferenceSystem:
             dem += miu_zj
         
         return dem and num / dem or (inf + sup) / 2
+    
+    # Mean of Maximum
+    def MOM(self, ruled_fuzzy_set_func, domain=None):
+        inf, sup = domain or self.output_variable.domain
+
+        vmax = max(ruled_fuzzy_set_func.eval(zj) for zj in np.arange(inf, sup + 1, 1))
+        zj_with_vmax = []
+        for zj in np.arange(inf, sup + 1, 1):
+            if ruled_fuzzy_set_func.eval(zj) == vmax:
+                zj_with_vmax.append(zj) 
+
+        return sum(zj_with_vmax) / len(zj_with_vmax)
