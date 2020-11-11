@@ -13,15 +13,15 @@ class Fluctuation:
     @staticmethod
     def very_negative(x):
         if x < -10000: return 1
-        elif -10000 <= x and x <= -1000: return (1000 + x) / (1000 - 10000)
-        # if x > -1000
+        elif -10000 <= x and x <= -100: return (100 + x) / (100 - 10000)
+        # if x > -100
         return 0
 
     @staticmethod
     def few_negative(x):
         if x < -1000: return 1
-        elif -1000 <= x and x <= -10: return (10 + x) / (10 - 1000)
-        # if x > -10
+        elif -1000 <= x and x <= -5: return (5 + x) / (5 - 1000)
+        # if x > -5
         return 0
 
     @staticmethod
@@ -40,8 +40,8 @@ class Fluctuation:
     
     @staticmethod
     def plot(func):
-        rank = func.__name__ == 'very_negative' and (-10000, -1000) or \
-               func.__name__ == 'few_negative' and (-1000, -10) or \
+        rank = func.__name__ == 'very_negative' and (-10000, -100) or \
+               func.__name__ == 'few_negative' and (-1000, -5) or \
                func.__name__ == 'negligible' and (-10, 0) or \
                func.__name__ == 'positive' and (0, 10000)
         
@@ -63,23 +63,23 @@ class Purchases:
 
     @staticmethod
     def medium(x):
-        if 1000 <= x and x <= 4500: return (4500 - 1000 - (4500 - x)) / (4500 - 1000)
-        elif 4500 < x and x <= 10000: return (10000 - x) / (10000 - 4500)
-        # if x < 1000 or x > 10000
+        if 500 <= x and x <= 4750: return (4750 - 500 - (4750 - x)) / (4750 - 500)
+        elif 4750 < x and x <= 10000: return (10000 - x) / (10000 - 4750)
+        # if x < 500 or x > 10000
         return 0
     
     @staticmethod
     def high(x):
-        if x < 10000: return 0
-        elif 10000 <= x and x <= 50000: return (50000 - 10000 - (50000 - x)) / (50000 - 10000)
-        # if x > 50000
+        if x < 5000: return 0
+        elif 5000 <= x and x <= 25000: return (25000 - 5000 - (25000 - x)) / (25000 - 5000)
+        # if x > 25000
         return 1
 
     @staticmethod
     def plot(func):
         rank = func.__name__ == 'few' and (0, 1000) or \
-               func.__name__ == 'medium' and (1000, 10000) or \
-               func.__name__ == 'high' and (10000, 50000)
+               func.__name__ == 'medium' and (500, 10000) or \
+               func.__name__ == 'high' and (5000, 25000)
         
         general_plot(func, rank)
 

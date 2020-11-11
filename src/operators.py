@@ -1,24 +1,36 @@
-class LogicOperator:
-
-    def __init__(self):
-        self.name = ''
+class OperationObject:
     
-    def eval(self, x, y):
+    def eval(self):
         pass
 
-class AND(LogicOperator):
+class Value(OperationObject):
 
-    def __init__(self):
-        self.name = "AND"
+    def __init__(self, fuzzy_set, value=None):
+        self.fuzzy_set = fuzzy_set
+        self.value = value
     
-    def eval(self, x, y):
+    def eval(self):
+        return fuzzy_set.membership_func(self.value)
+
+class AND(OperationObject):
+
+    def __init__(self, x, y):
+        self.name = "AND"
+        self.x = x
+        self.y = y
+    
+    def eval(self):
+        x, y = x.eval(), y.eval()
         return min(x, y)
 
 
-class OR(LogicOperator):
+class OR(OperationObject):
 
-    def __init__(self):
+    def __init__(self, x, y):
         self.name = "OR"
+        self.x = x
+        self.y = y
     
-    def eval(self, x, y):
+    def eval(self):
+        x, y = x.eval(), y.eval()
         return max(x, y)
