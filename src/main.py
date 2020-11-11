@@ -49,30 +49,41 @@ def define_sales():
     
     return sales, [very_few, few, medium, high]
 
-def define_rules(variables, sets):
+def define_rules(variables, sets, vfluctuation, vpurchases):
     rules = []
 
     # Define first rule: if fluctuation is positive then sales is high
-    antecedent = Value(sets['fluctuation']['positive'])
-    consequence = Value(sets['sales']['high'])
+    antecedent = Value(sets['fluctuation']['positive'], vfluctuation)
+    consequence = sets['sales']['high']
+    
     rule = FuzzyRule(variables, sets, antecedent, consequence)
     rules.append(rule)
 
     # Define second rule: if fluctuation is negligible and (purchases is medium or purchases is high) then sales is medium
-    antecedent = AND(Value(sets['fluctuation']['negligible']), OR(sets['purchases']['medium'], sets['purchases']['high']))
-    consequence = Value(sets['sales']['medium'])
+    purchases_is_high = Value(sets['purchases']['high'], vpurchases)
+    purchases_is_medium = Value(sets['purchases']['medium'], vpurchases)
+    fluctuation_is_negligible = Value(sets['fluctuation']['negligible'], vfluctuation)
+
+    antecedent = AND(fluctuation_is_negligible, OR(purchases_is_medium, purchases_is_high))
+    consequence = sets['sales']['medium']
+    
     rule = FuzzyRule(variables, sets, antecedent, consequence)
     rules.append(rule)
     
     # Define third rule: if fluctuation is very negative and then sales is very few
-    antecedent = Value(sets['fluctuation']['very_negative'])
-    consequence = Value(sets['sales']['very_few'])
+    antecedent = Value(sets['fluctuation']['very_negative'], vfluctuation)
+    consequence = sets['sales']['very_few']
+    
     rule = FuzzyRule(variables, sets, antecedent, consequence)
     rules.append(rule)
 
     # Define fourth rule: if fluctuation is few negative and purchases is few then sales is few
-    antecedent = AND(Value(sets['fluctuation']['few_negative']), Value(sets['purchases']['few']))
-    consequence = Value(sets['sales']['few'])
+    fluctuation_is_few_negative = Value(sets['fluctuation']['few_negative'], vfluctuation)
+    purchases_is_few = Value(sets['purchases']['few'], vpurchases)
+
+    antecedent = AND(fluctuation_is_few_negative, purchases_is_few)
+    consequence = sets['sales']['few']
+
     rule = FuzzyRule(variables, sets, antecedent, consequence)
     rules.append(rule)
 
@@ -88,4 +99,6 @@ if __name__ == '__main__':
     for fset in fluctuation_sets + purchases_sets + sales_sets:
         sets[fset.linguistic_variable_name][fset.name] = fset
     
-    rules = define_rules(variables, sets)
+    # Testing rules with some values
+    vfluctuation, vpurchases =  -300, 300
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)

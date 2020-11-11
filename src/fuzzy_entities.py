@@ -17,4 +17,6 @@ class FuzzyRule:
         self.sets = sets
         self.antecedent = antecedent
         self.consecuence = consecuence
-        
+    
+    def eval(self):
+        antecedent.eval(), consecuence.membership_func
