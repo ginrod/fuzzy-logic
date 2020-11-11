@@ -101,7 +101,8 @@ if __name__ == '__main__':
         sets[fset.linguistic_variable_name][fset.name] = fset
     
     # Testing rules with some values
-    vfluctuation, vpurchases = -300, 5000
+    vfluctuation, vpurchases = -1000, 10
+    # vfluctuation, vpurchases = 0, 1000
     rules = define_rules(variables, sets, vfluctuation, vpurchases)
 
     FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
@@ -110,4 +111,16 @@ if __name__ == '__main__':
     print(defuzzied_output)
 
     defuzzied_output = FIS.COA(FIS.larsen_method())
+    print(defuzzied_output)
+
+    defuzzied_output = FIS.MOM(FIS.mamdani_method())
+    print(defuzzied_output)
+
+    defuzzied_output = FIS.MOM(FIS.larsen_method())
+    print(defuzzied_output)
+
+    defuzzied_output = FIS.BOA(FIS.mamdani_method())
+    print(defuzzied_output)
+
+    defuzzied_output = FIS.BOA(FIS.larsen_method())
     print(defuzzied_output)

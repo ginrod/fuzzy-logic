@@ -1,4 +1,7 @@
+import math as m
 import numpy as np
+from scipy.integrate import trapz
+import matplotlib.pyplot as plt
 from operators import MinOperator, ProductOperator, MaxOperator
 
 class FuzzyInferenceSystem:
@@ -51,3 +54,28 @@ class FuzzyInferenceSystem:
                 zj_with_vmax.append(zj) 
 
         return sum(zj_with_vmax) / len(zj_with_vmax)
+    
+    def BOA(self, ruled_fuzzy_set_func, domain=None):
+        def _integrate(f, a, b, dx = 1):
+            y = [f(x) for x in np.arange(a, b, dx)]
+
+            return trapz(y, dx=dx)
+        
+        inf, sup = domain or self.output_variable.domain
+
+        left, right = inf, sup
+        mid = 0.0
+        iteration_number = 0
+
+        while abs(right - left) > 0  and iteration_number <= 15:
+            mid = (left + right) / 2
+
+            suml = _integrate(ruled_fuzzy_set_func.eval, inf, mid)
+            sumr = _integrate(ruled_fuzzy_set_func.eval, mid, sup)
+
+            right = suml >= sumr and mid or right
+            left = suml < sumr and mid or left
+
+            iteration_number += 1
+
+        return mid
