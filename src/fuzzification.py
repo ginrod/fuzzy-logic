@@ -98,9 +98,9 @@ class Sales:
 
     @staticmethod
     def few(x):
-        if x < 10: return 1
-        elif 10 <= x and x <= 1000: return (1000 - 10 - (1000 - x)) / (1000 - 10)
-        # if x > 1000
+        if x < 0: return 1
+        elif 0 <= x and x <= 1500: return (1500 - x) / 1500
+        # if x > 1500
         return 0
 
     @staticmethod
@@ -113,16 +113,16 @@ class Sales:
     @staticmethod
     def high(x):
         if x < 10000: return 0
-        elif 10000 <= x and x <= 50000: return (50000 - 10000 - (50000 - x)) / (50000 - 10000)
-        # if x > 50000
+        elif 10000 <= x and x <= 25000: return (25000 - 10000 - (25000 - x)) / (25000 - 10000)
+        # if x > 25000
         return 1
 
     @staticmethod
     def plot(func):
         rank = func.__name__ == 'very_few' and (0, 10) or \
-               func.__name__ == 'few' and (10, 1000) or \
+               func.__name__ == 'few' and (0, 1500) or \
                func.__name__ == 'medium' and (1000, 10000) or \
-               func.__name__ == 'high' and (10000, 50000)
+               func.__name__ == 'high' and (10000, 25000)
         
         general_plot(func, rank)
 
