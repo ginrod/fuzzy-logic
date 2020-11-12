@@ -201,7 +201,7 @@ if __name__ == '__main__':
 
 
     # Fourth set of testing
-    fluctuation_very_few = [-50, -100, -10]
+    fluctuation_very_few = [-500, -100, -10]
     purchases_few = [10, 100, 500]
     # It should output a value corresponding with few Sales
     print("\nTesting fourth set: fluctuation very few and few purchases")

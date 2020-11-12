@@ -3,3 +3,6 @@ Class Project of Fuzzy Logic for 4th Degree of Computer Science, subject Simulac
 
 # Install requeriments
 python -m pip install -r requeriments.txt
+
+# Usage
+run **main.py**
