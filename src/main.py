@@ -2,6 +2,7 @@ from operators import *
 from fuzzy_entities import *
 from fuzzification import Fluctuation, Purchases, Sales
 from fuzzy_inference_system import FuzzyInferenceSystem
+from random import randrange, randint
 
 def define_fluctuation():
     categories = { 
@@ -90,6 +91,77 @@ def define_rules(variables, sets, vfluctuation, vpurchases):
 
     return rules
 
+def test_mamdani_COA(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.COA(FIS.mamdani_method())
+    
+    return defuzzied_output
+
+def test_mamdani_BOA(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.BOA(FIS.mamdani_method())
+    
+    return defuzzied_output
+
+def test_mamdani_MOM(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.MOM(FIS.mamdani_method())
+    
+    return defuzzied_output
+
+def test_larsen_COA(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.COA(FIS.larsen_method())
+    
+    return defuzzied_output
+
+def test_larsen_BOA(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.BOA(FIS.larsen_method())
+    
+    return defuzzied_output
+
+def test_larsen_MOM(variables, sets, vfluctuation, vpurchases):
+    rules = define_rules(variables, sets, vfluctuation, vpurchases)
+    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    defuzzied_output = FIS.MOM(FIS.larsen_method())
+    
+    return defuzzied_output
+
+def execute_set_of_tests(variables, sets, fluctuation_values, purchases_values):
+    for vfluctuation, vpurchases in zip(fluctuation_values, purchases_values):
+        print(f"\nFluctuation={vfluctuation}")
+        print(f"Purchases={vpurchases}")
+
+        print("\nExecuting FIS using Mamdani and COA")
+        output = test_mamdani_COA(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
+        print("\nExecuting FIS using Mamdani and BOA")
+        output = test_mamdani_BOA(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
+        print("\nExecuting FIS using Mamdani and MOM")
+        output = test_mamdani_MOM(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
+        print("\nExecuting FIS using Larsen and COA")
+        output = test_larsen_COA(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
+        print("\nExecuting FIS using Larsen and BOA")
+        output = test_larsen_BOA(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
+        print("\nExecuting FIS using Larsen and MOM")
+        output = test_larsen_MOM(variables, sets, vfluctuation, vpurchases)
+        print(output)
+
 if __name__ == '__main__':
     fluctuation_var, fluctuation_sets = define_fluctuation()
     purchases_var, purchases_sets = define_purchases()
@@ -101,26 +173,36 @@ if __name__ == '__main__':
         sets[fset.linguistic_variable_name][fset.name] = fset
     
     # Testing rules with some values
-    vfluctuation, vpurchases = -1000, 10
-    # vfluctuation, vpurchases = 0, 1000
-    rules = define_rules(variables, sets, vfluctuation, vpurchases)
 
-    FIS = FuzzyInferenceSystem([variables['fluctuation'], variables['purchases']], variables['sales'], rules)
+    # First set of testing
+    fluctuation_positive = [50, 500, 5000]
+    purchases_any = [randrange(0, 25000), randrange(0, 25000), randrange(0, 25000)]
+    # It should output a value corresponding with high Sales
+    print("Testing first set: fluctuation positive and random purchases")
+    execute_set_of_tests(variables, sets, fluctuation_positive, purchases_any)
 
-    defuzzied_output = FIS.COA(FIS.mamdani_method())
-    print(defuzzied_output)
 
-    defuzzied_output = FIS.COA(FIS.larsen_method())
-    print(defuzzied_output)
+    # Second set of testing
+    fluctuation_negligible = [-10, -5, 0]
+    purchases_medium = [1000, 5000, 8000]
+    purchases_high = [10000, 15000, 20000]
+    purchases = [p[randint(0, 1)] for p in zip(purchases_medium, purchases_high)]
+    # It should output a value corresponding with medium Sales
+    print("\nTesting second set: fluctuation negligible and medium or high purchases")
+    execute_set_of_tests(variables, sets, fluctuation_negligible, purchases)
 
-    defuzzied_output = FIS.MOM(FIS.mamdani_method())
-    print(defuzzied_output)
 
-    defuzzied_output = FIS.MOM(FIS.larsen_method())
-    print(defuzzied_output)
+    # Third set of testing
+    fluctuation_very_negative = [-5000, -1000, -100]
+    purchases_any = [randrange(0, 25000), randrange(0, 25000), randrange(0, 25000)]
+    # It should output a value corresponding with very few Sales
+    print("\nTesting third set: fluctuation very negative and random purchases")
+    execute_set_of_tests(variables, sets, fluctuation_very_negative, purchases_any)
 
-    defuzzied_output = FIS.BOA(FIS.mamdani_method())
-    print(defuzzied_output)
 
-    defuzzied_output = FIS.BOA(FIS.larsen_method())
-    print(defuzzied_output)
+    # Fourth set of testing
+    fluctuation_very_few = [-50, -100, -10]
+    purchases_few = [10, 100, 500]
+    # It should output a value corresponding with few Sales
+    print("\nTesting fourth set: fluctuation very few and few purchases")
+    execute_set_of_tests(variables, sets, fluctuation_very_few, purchases_few)
